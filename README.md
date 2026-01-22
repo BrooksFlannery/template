@@ -10,6 +10,7 @@ A modern web application built with functional programming principles.
 - **UI Components**: shadcn/ui
 - **Authentication**: BetterAuth
 - **Linting/Formatting**: Biome
+- **Testing**: bun test
 - **Functional Programming**: Custom FP utilities (Option, Either, pipe)
 
 ## Getting Started

@@ -1,0 +1,19 @@
+engine biome(1.0)
+language js
+
+// Detect Option/Either values accessed directly without handling
+// This is a partial implementation - we'll catch obvious cases and improve over time
+or {
+  // Match direct .value access on Option (should use match/getOrElse)
+  `$option.value` as $access where {
+    register_diagnostic(span=$access, message="Option values should be handled with match() or getOrElse(), not accessed directly via .value. If truly exceptional, use @ts-expect-error and update this error message to explicitly state the type of situation that makes breaking this rule acceptable.", severity="error")
+  },
+  // Match direct property access on Either (should use matchEither)
+  // Note: This is simplified - may need refinement based on Either implementation
+  `$either.left` as $access where {
+    register_diagnostic(span=$access, message="Either values should be handled with matchEither(), not accessed directly. If truly exceptional, use @ts-expect-error and update this error message to explicitly state the type of situation that makes breaking this rule acceptable.", severity="error")
+  },
+  `$either.right` as $access where {
+    register_diagnostic(span=$access, message="Either values should be handled with matchEither(), not accessed directly. If truly exceptional, use @ts-expect-error and update this error message to explicitly state the type of situation that makes breaking this rule acceptable.", severity="error")
+  }
+}
