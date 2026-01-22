@@ -187,5 +187,30 @@
     "formatter": {
       "enabled": true
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/*.spec.ts",
+        "**/*.spec.tsx"
+      ],
+      "plugins": [
+        "./plugins/no-dynamic-imports-in-tests.grit",
+        "./plugins/no-toBeDefined-or-toBeTruthy-in-tests.grit",
+        "./plugins/no-spyOn-in-tests.grit",
+        "./plugins/no-explicit-any-in-tests.grit"
+      ]
+    },
+    {
+      "includes": ["**/*.ts", "**/*.tsx"],
+      "plugins": [
+        "./plugins/no-zod-native-enum.grit",
+        "./plugins/enforce-option-either-usage.grit",
+        "./plugins/no-direct-null-checks.grit",
+        "./plugins/no-unhandled-option-either.grit"
+      ]
+    }
+  ]
 }

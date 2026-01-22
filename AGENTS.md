@@ -7,6 +7,7 @@ This document defines the rules for AI agents in this codebase.
 **Tech Stack:**
 - Runtime: Bun
 - Linter/Formatter: Biome
+- Testing: bun test
 - Framework: Next.js
 - API Layer: tRPC
 - UI Components: shadcn/ui
