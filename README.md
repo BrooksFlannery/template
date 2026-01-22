@@ -1,4 +1,4 @@
-# Recall
+# Template
 
 A modern web application built with functional programming principles.
 
@@ -46,7 +46,7 @@ bun run type-check
 ## Project Structure
 
 ```
-recall/
+template/
 ├── app/              # Next.js app directory
 ├── server/           # Server-side code
 │   ├── trpc/        # tRPC routers and procedures
