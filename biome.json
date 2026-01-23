@@ -51,7 +51,8 @@
         "noUselessRename": "error",
         "noUselessSwitchCase": "error",
         "noArguments": "error",
-        "noCommaOperator": "error"
+        "noCommaOperator": "error",
+        "useLiteralKeys": "off"
       },
       "correctness": {
         "noConstAssign": "error",
