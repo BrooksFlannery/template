@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -27,6 +27,16 @@
   "organizeImports": {
     "enabled": true
   },
+  "plugins": [
+    "./plugins/no-zod-native-enum.grit",
+    "./plugins/enforce-option-either-usage.grit",
+    "./plugins/no-direct-null-checks.grit",
+    "./plugins/no-unhandled-option-either.grit",
+    "./plugins/no-dynamic-imports-in-tests.grit",
+    "./plugins/no-toBeDefined-or-toBeTruthy-in-tests.grit",
+    "./plugins/no-spyOn-in-tests.grit",
+    "./plugins/no-explicit-any-in-tests.grit"
+  ],
   "linter": {
     "enabled": true,
     "rules": {
@@ -192,22 +202,10 @@
         "**/*.test.tsx",
         "**/*.spec.ts",
         "**/*.spec.tsx"
-      ],
-      "plugins": [
-        "./plugins/no-dynamic-imports-in-tests.grit",
-        "./plugins/no-toBeDefined-or-toBeTruthy-in-tests.grit",
-        "./plugins/no-spyOn-in-tests.grit",
-        "./plugins/no-explicit-any-in-tests.grit"
       ]
     },
     {
-      "includes": ["**/*.ts", "**/*.tsx"],
-      "plugins": [
-        "./plugins/no-zod-native-enum.grit",
-        "./plugins/enforce-option-either-usage.grit",
-        "./plugins/no-direct-null-checks.grit",
-        "./plugins/no-unhandled-option-either.grit"
-      ]
+      "includes": ["**/*.ts", "**/*.tsx"]
     }
   ]
 }
