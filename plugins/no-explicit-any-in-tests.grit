@@ -1,4 +1,4 @@
-engine biome(1.0)
+engine biome(2.0)
 language js
 
 // Match explicit any type annotations

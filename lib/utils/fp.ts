@@ -101,8 +101,7 @@ export const none: Option<never> = {
  *   console.log(name.value) // TypeScript knows name.value exists here
  * }
  */
-export const isSome = <A>(option: Option<A>): option is Some<A> =>
-  option._tag === "Some"
+export const isSome = <A>(option: Option<A>): option is Some<A> => option._tag === "Some"
 
 /**
  * Checks if an Option is empty (has no value).
@@ -119,8 +118,7 @@ export const isSome = <A>(option: Option<A>): option is Some<A> =>
  *   console.log("No name found") // TypeScript knows there's no value here
  * }
  */
-export const isNone = <A>(option: Option<A>): option is None =>
-  option._tag === "None"
+export const isNone = <A>(option: Option<A>): option is None => option._tag === "None"
 
 /**
  * Converts a value that might be null or undefined into an Option.
@@ -175,6 +173,7 @@ export const fromNullable = <A>(value: A | null | undefined): Option<A> =>
 export const map =
   <A, B>(f: (a: A) => B) =>
   (option: Option<A>): Option<B> =>
+    // biome-ignore lint/plugin: Internal implementation - isSome() guarantees .value exists
     isSome(option) ? some(f(option.value)) : none
 
 /**
@@ -213,6 +212,7 @@ export const map =
 export const flatMap =
   <A, B>(f: (a: A) => Option<B>) =>
   (option: Option<A>): Option<B> =>
+    // biome-ignore lint/plugin: Internal implementation - isSome() guarantees .value exists
     isSome(option) ? f(option.value) : none
 
 /**
@@ -243,6 +243,7 @@ export const flatMap =
 export const getOrElse =
   <A>(fallback: A) =>
   (option: Option<A>): A =>
+    // biome-ignore lint/plugin: Internal implementation - isSome() guarantees .value exists
     isSome(option) ? option.value : fallback
 
 /**
@@ -270,6 +271,7 @@ export const getOrElse =
 export const getOrElseLazy =
   <A>(fallback: () => A) =>
   (option: Option<A>): A =>
+    // biome-ignore lint/plugin: Internal implementation - isSome() guarantees .value exists
     isSome(option) ? option.value : fallback()
 
 /**
@@ -301,6 +303,7 @@ export const getOrElseLazy =
 export const match =
   <A, B>(onNone: () => B, onSome: (a: A) => B) =>
   (option: Option<A>): B =>
+    // biome-ignore lint/plugin: Internal implementation - isSome() guarantees .value exists
     isSome(option) ? onSome(option.value) : onNone()
 
 // ============================================================================
@@ -406,8 +409,7 @@ export const right = <A>(value: A): Either<never, A> => ({
  *   console.error(result.left) // TypeScript knows result.left exists here
  * }
  */
-export const isLeft = <E, A>(either: Either<E, A>): either is Left<E> =>
-  either._tag === "Left"
+export const isLeft = <E, A>(either: Either<E, A>): either is Left<E> => either._tag === "Left"
 
 /**
  * Checks if an Either represents success (Right).
@@ -424,8 +426,7 @@ export const isLeft = <E, A>(either: Either<E, A>): either is Left<E> =>
  *   console.log(result.right) // TypeScript knows result.right exists here
  * }
  */
-export const isRight = <E, A>(either: Either<E, A>): either is Right<A> =>
-  either._tag === "Right"
+export const isRight = <E, A>(either: Either<E, A>): either is Right<A> => either._tag === "Right"
 
 /**
  * Transforms the success value inside an Either if it exists.
@@ -456,6 +457,7 @@ export const isRight = <E, A>(either: Either<E, A>): either is Right<A> =>
 export const mapEither =
   <A, B>(f: (a: A) => B) =>
   <E>(either: Either<E, A>): Either<E, B> =>
+    // biome-ignore lint/plugin: Internal implementation - isRight() guarantees .right exists
     isRight(either) ? right(f(either.right)) : either
 
 /**
@@ -484,6 +486,7 @@ export const mapEither =
 export const mapLeft =
   <E, F>(f: (e: E) => F) =>
   <A>(either: Either<E, A>): Either<F, A> =>
+    // biome-ignore lint/plugin: Internal implementation - isLeft() guarantees .left exists
     isLeft(either) ? left(f(either.left)) : either
 
 /**
@@ -522,6 +525,7 @@ export const mapLeft =
 export const flatMapEither =
   <A, E, B>(f: (a: A) => Either<E, B>) =>
   (either: Either<E, A>): Either<E, B> =>
+    // biome-ignore lint/plugin: Internal implementation - isRight() guarantees .right exists
     isRight(either) ? f(either.right) : either
 
 /**
@@ -552,6 +556,7 @@ export const flatMapEither =
 export const getOrElseEither =
   <E, A>(fallback: A) =>
   (either: Either<E, A>): A =>
+    // biome-ignore lint/plugin: Internal implementation - isRight() guarantees .right exists
     isRight(either) ? either.right : fallback
 
 /**
@@ -582,6 +587,7 @@ export const getOrElseEither =
 export const getOrElseLazyEither =
   <E, A>(fallback: (error: E) => A) =>
   (either: Either<E, A>): A =>
+    // biome-ignore lint/plugin: Internal implementation - isRight()/isLeft() guarantee .right/.left exists
     isRight(either) ? either.right : fallback(either.left)
 
 /**
@@ -613,6 +619,7 @@ export const getOrElseLazyEither =
 export const matchEither =
   <E, A, B>(onLeft: (e: E) => B, onRight: (a: A) => B) =>
   (either: Either<E, A>): B =>
+    // biome-ignore lint/plugin: Internal implementation - isRight()/isLeft() guarantee .right/.left exists
     isRight(either) ? onRight(either.right) : onLeft(either.left)
 
 // ============================================================================
@@ -677,23 +684,14 @@ export const matchEither =
  */
 export function pipe<A>(value: A): A
 export function pipe<A, B>(value: A, fn1: (a: A) => B): B
-export function pipe<A, B, C>(
-  value: A,
-  fn1: (a: A) => B,
-  fn2: (b: B) => C,
-): C
-export function pipe<A, B, C, D>(
-  value: A,
-  fn1: (a: A) => B,
-  fn2: (b: B) => C,
-  fn3: (c: C) => D,
-): D
+export function pipe<A, B, C>(value: A, fn1: (a: A) => B, fn2: (b: B) => C): C
+export function pipe<A, B, C, D>(value: A, fn1: (a: A) => B, fn2: (b: B) => C, fn3: (c: C) => D): D
 export function pipe<A, B, C, D, E>(
   value: A,
   fn1: (a: A) => B,
   fn2: (b: B) => C,
   fn3: (c: C) => D,
-  fn4: (d: D) => E,
+  fn4: (d: D) => E
 ): E
 export function pipe<A, B, C, D, E, F>(
   value: A,
@@ -701,7 +699,7 @@ export function pipe<A, B, C, D, E, F>(
   fn2: (b: B) => C,
   fn3: (c: C) => D,
   fn4: (d: D) => E,
-  fn5: (e: E) => F,
+  fn5: (e: E) => F
 ): F
 export function pipe<A, B, C, D, E, F, G>(
   value: A,
@@ -710,7 +708,7 @@ export function pipe<A, B, C, D, E, F, G>(
   fn3: (c: C) => D,
   fn4: (d: D) => E,
   fn5: (e: E) => F,
-  fn6: (f: F) => G,
+  fn6: (f: F) => G
 ): G
 export function pipe<A, B, C, D, E, F, G, H>(
   value: A,
@@ -720,12 +718,9 @@ export function pipe<A, B, C, D, E, F, G, H>(
   fn4: (d: D) => E,
   fn5: (e: E) => F,
   fn6: (f: F) => G,
-  fn7: (g: G) => H,
+  fn7: (g: G) => H
 ): H
-export function pipe(
-  value: unknown,
-  ...fns: Array<(x: unknown) => unknown>
-): unknown {
+export function pipe(value: unknown, ...fns: Array<(x: unknown) => unknown>): unknown {
   // How it works: Start with the value, then apply each function in sequence
   // reduce starts with 'value', then for each function, calls it with the
   // accumulated result so far

@@ -3,7 +3,7 @@
 // and we want to enforce an abstraction layer (e.g., tableMethods).
 // Update the file paths in the biome.json override to match actual patterns.
 //
-// engine biome(1.0)
+// engine biome(2.0)
 // language js
 //
 // or {

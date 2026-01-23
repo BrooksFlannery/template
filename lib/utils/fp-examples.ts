@@ -12,23 +12,23 @@
  */
 
 import {
-  Option,
-  Either,
-  some,
-  none,
-  left,
-  right,
+  type Either,
   flatMap,
+  flatMapEither,
+  fromNullable,
+  getOrElse,
+  isSome,
+  left,
   map,
   mapEither,
   mapLeft,
-  flatMapEither,
-  getOrElse,
   match,
   matchEither,
+  none,
+  type Option,
   pipe,
-  fromNullable,
-  isSome,
+  right,
+  some,
 } from "./fp"
 
 // ============================================================================
@@ -41,7 +41,7 @@ const _getUserData = (userId: number): Option<string> =>
     getUser(userId),
     flatMap(getUserProfile),
     flatMap(getProfileEmail),
-    map((email) => email.toLowerCase()),
+    map((email) => email.toLowerCase())
   )
 
 // ❌ DON'T: Nest flatMap calls or use imperative conditionals
@@ -59,7 +59,7 @@ const _getUserData = (userId: number): Option<string> =>
 const _formatUser = (userId: number): Option<string> =>
   pipe(
     getUser(userId),
-    map((user) => `${user.name} (${user.id})`),
+    map((user) => `${user.name} (${user.id})`)
   )
 
 // ❌ DON'T: Use flatMap when map suffices
@@ -75,13 +75,17 @@ const _displayUser = (userId: number): string =>
     getUser(userId),
     match(
       () => "User not found",
-      (user) => `Welcome, ${user.name}`,
-    ),
+      (user) => `Welcome, ${user.name}`
+    )
   )
 
 // ✅ DO: Use getOrElse for simple fallbacks
 const _getUserName = (userId: number): string =>
-  pipe(getUser(userId), map((u) => u.name), getOrElse("Unknown"))
+  pipe(
+    getUser(userId),
+    map((u) => u.name),
+    getOrElse("Unknown")
+  )
 
 // ❌ DON'T: Access .value without checking isSome
 // const name = getUser(userId).value.name // Type error + runtime risk
@@ -91,12 +95,10 @@ const _getUserName = (userId: number): string =>
 // ============================================================================
 
 // ✅ DO: Use fromNullable for APIs that return null/undefined
-const _parseInput = (input: string | null): Option<string> =>
-  fromNullable(input?.trim())
+const _parseInput = (input: string | null): Option<string> => fromNullable(input?.trim())
 
 // ✅ DO: Convert find() results to Option
-const _findUserById = (id: number): Option<User> =>
-  fromNullable(users.find((u) => u.id === id))
+const _findUserById = (id: number): Option<User> => fromNullable(users.find((u) => u.id === id))
 
 // ❌ DON'T: Return null/undefined from functions
 // const findUser = (id: number): User | null => users.find(...)
@@ -108,20 +110,19 @@ const _findUserById = (id: number): Option<User> =>
 // ✅ DO: Use Either for operations that can fail with meaningful errors
 const parseNumber = (str: string): Either<string, number> => {
   const num = Number(str)
-  return isNaN(num) ? left("Invalid number format") : right(num)
+  return Number.isNaN(num) ? left("Invalid number format") : right(num)
 }
 
 // ✅ DO: Chain Either operations with flatMapEither
 const _processData = (input: string): Either<string, ProcessedData> =>
-  pipe(
-    parseNumber(input),
-    flatMapEither(validateRange),
-    flatMapEither(transformData),
-  )
+  pipe(parseNumber(input), flatMapEither(validateRange), flatMapEither(transformData))
 
 // ✅ DO: Use mapEither for transformations that can't fail
 const _formatResult = (result: Either<string, number>): Either<string, string> =>
-  pipe(result, mapEither((n) => `Result: ${n}`))
+  pipe(
+    result,
+    mapEither((n) => `Result: ${n}`)
+  )
 
 // ❌ DON'T: Use Either for simple nullable cases (use Option)
 // const getUser = (id: number): Either<"not found", User> => ...
@@ -137,17 +138,15 @@ const _complexOperation = (input: string): Either<string, Output> =>
     flatMapEither(validateInput),
     flatMapEither(transformInput),
     flatMapEither(validateOutput),
-    mapEither(() => ({ result: "success" })),
+    mapEither(() => ({ result: "success" }))
     // If any step fails, entire chain returns left(error)
   )
 
 // ✅ DO: Use mapLeft to transform error types
-const _withErrorContext = (
-  result: Either<string, ProcessedData>,
-): Either<Error, ProcessedData> =>
+const _withErrorContext = (result: Either<string, ProcessedData>): Either<Error, ProcessedData> =>
   pipe(
     result,
-    mapLeft((msg: string) => new Error(`Operation failed: ${msg}`)),
+    mapLeft((msg: string) => new Error(`Operation failed: ${msg}`))
   )
 
 // ❌ DON'T: Catch and ignore errors in the middle of a chain
@@ -162,11 +161,7 @@ const _withErrorContext = (
 
 // ✅ DO: Keep pipe chains readable (3-5 operations max)
 const _processUser = (id: number): Option<string> =>
-  pipe(
-    getUser(id),
-    flatMap(getUserProfile),
-    map(formatProfile),
-  )
+  pipe(getUser(id), flatMap(getUserProfile), map(formatProfile))
 
 // ✅ DO: Extract complex logic into named functions
 const formatProfile = (profile: Profile): string => {
@@ -190,9 +185,8 @@ const formatProfile = (profile: Profile): string => {
 // ✅ DO: Convert Option to Either when you need error context
 const requireUser = (userId: number): Either<string, User> => {
   const userOption = getUser(userId)
-  return isSome(userOption)
-    ? right(userOption.value)
-    : left(`User ${userId} not found`)
+  // biome-ignore lint/plugin: Internal implementation - isSome() guarantees .value exists
+  return isSome(userOption) ? right(userOption.value) : left(`User ${userId} not found`)
 }
 
 // ✅ DO: Convert Either to Option when error details don't matter
@@ -201,8 +195,8 @@ const _getUserOption = (userId: number): Option<User> =>
     requireUser(userId),
     matchEither(
       () => none,
-      (user) => some(user),
-    ),
+      (user) => some(user)
+    )
   )
 
 // ============================================================================
@@ -214,23 +208,19 @@ const _getNestedValue = (obj: { user?: { profile?: { email?: string } } }) =>
   pipe(
     fromNullable(obj.user),
     flatMap((user) => fromNullable(user.profile)),
-    flatMap((profile) => fromNullable(profile.email)),
+    flatMap((profile) => fromNullable(profile.email))
   )
 
 // Pattern: Validation pipeline
 const _validateAndProcess = (input: unknown): Either<string, Processed> =>
-  pipe(
-    validateInput(input),
-    flatMapEither(transformInput),
-    flatMapEither(validateOutput),
-  )
+  pipe(validateInput(input), flatMapEither(transformInput), flatMapEither(validateOutput))
 
 // Pattern: Optional transformation
 const _maybeTransform = (value: string): Option<string> =>
   pipe(
     fromNullable(value),
     map((v) => v.trim()),
-    flatMap((v) => (v.length > 0 ? some(v.toUpperCase()) : none)),
+    flatMap((v) => (v.length > 0 ? some(v.toUpperCase()) : none))
   )
 
 // ============================================================================
@@ -277,11 +267,9 @@ const getUserProfile = (_user: User): Option<Profile> => none
 const getProfileEmail = (_profile: Profile): Option<string> => none
 const parseInputEither = (_input: string): Either<string, unknown> => right({})
 const validateRange = (_n: number): Either<string, number> => right(0)
-const transformData = (_n: number): Either<string, ProcessedData> =>
-  right({ value: 0 })
+const transformData = (_n: number): Either<string, ProcessedData> => right({ value: 0 })
 const validateInput = (_input: unknown): Either<string, unknown> => right({})
 const transformInput = (_input: unknown): Either<string, unknown> => right({})
-const validateOutput = (_input: unknown): Either<string, Processed> =>
-  right({ data: { value: 0 } })
+const validateOutput = (_input: unknown): Either<string, Processed> => right({ data: { value: 0 } })
 
 const users: User[] = []

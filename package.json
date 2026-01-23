@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "biome check .",
-    "lint:fix": "biome check --write .",
+    "check": "biome check .",
+    "lint:fix": "biome lint --write .",
     "format": "biome format --write .",
     "type-check": "tsc --noEmit"
   },
