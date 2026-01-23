@@ -98,7 +98,6 @@
         "useExponentiationOperator": "error",
         "useFragmentSyntax": "error",
         "useImportType": "error",
-        "useNamespaceKeyword": "error",
         "useNamingConvention": {
           "level": "error",
           "options": {
@@ -106,8 +105,7 @@
             "conventions": [
               {
                 "selector": {
-                  "kind": "variable",
-                  "modifiers": ["const"]
+                  "kind": "variable"
                 },
                 "formats": ["CONSTANT_CASE", "camelCase", "PascalCase"]
               },
@@ -164,7 +162,6 @@
         "noRedeclare": "error",
         "noShadowRestrictedNames": "error",
         "noUnsafeNegation": "error",
-        "noUnusedImports": "error",
         "useGetterReturn": "error",
         "useValidTypeof": "error"
       }

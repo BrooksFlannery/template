@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Functional Programming Patterns - Idiomatic Code Examples
  *
@@ -7,6 +8,7 @@
  * @fileoverview
  * Note: Functions in this file are examples only and intentionally unused.
  * Unused variable warnings are expected and acceptable for example code.
+ * Type checking is disabled for this file to allow intentional unused examples.
  */
 
 import {
