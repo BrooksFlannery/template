@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -7,13 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": [
-      "node_modules",
-      ".next",
-      "dist",
-      "build",
-      ".turbo"
-    ]
+    "includes": ["**", "!!node_modules", "!!.next", "!!dist", "!!build", "!!.turbo", "!!plugins"]
   },
   "formatter": {
     "enabled": true,
@@ -24,9 +18,22 @@
     "lineWidth": 100,
     "attributePosition": "auto"
   },
-  "organizeImports": {
-    "enabled": true
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
   },
+  "plugins": [
+    "./plugins/no-zod-native-enum.grit",
+    "./plugins/no-direct-null-checks.grit",
+    "./plugins/no-unhandled-option-either.grit",
+    "./plugins/no-dynamic-imports-in-tests.grit",
+    "./plugins/no-toBeDefined-or-toBeTruthy-in-tests.grit",
+    "./plugins/no-spyOn-in-tests.grit",
+    "./plugins/no-explicit-any-in-tests.grit"
+  ],
   "linter": {
     "enabled": true,
     "rules": {
@@ -43,7 +50,9 @@
         "noUselessLabel": "error",
         "noUselessRename": "error",
         "noUselessSwitchCase": "error",
-        "noWith": "error"
+        "noArguments": "error",
+        "noCommaOperator": "error",
+        "useLiteralKeys": "off"
       },
       "correctness": {
         "noConstAssign": "error",
@@ -53,7 +62,7 @@
         "noEmptyPattern": "error",
         "noGlobalObjectCalls": "error",
         "noInvalidConstructorSuper": "error",
-        "noInvalidNewBuiltin": "error",
+        "noInvalidBuiltinInstantiation": "error",
         "noNonoctalDecimalEscape": "error",
         "noPrecisionLoss": "error",
         "noSelfAssign": "error",
@@ -69,6 +78,7 @@
         "noUnusedVariables": "error",
         "useIsNan": "error",
         "useValidForDirection": "error",
+        "useValidTypeof": "error",
         "useYield": "error"
       },
       "performance": {
@@ -80,8 +90,6 @@
         "noGlobalEval": "error"
       },
       "style": {
-        "noArguments": "error",
-        "noCommaOperator": "error",
         "noDefaultExport": "off",
         "noImplicitBoolean": "error",
         "noInferrableTypes": "error",
@@ -91,14 +99,12 @@
         "noRestrictedGlobals": "error",
         "noShoutyConstants": "error",
         "noUnusedTemplateLiteral": "error",
-        "noVar": "error",
         "useBlockStatements": "error",
         "useConst": "error",
         "useDefaultParameterLast": "error",
         "useExponentiationOperator": "error",
         "useFragmentSyntax": "error",
         "useImportType": "error",
-        "useNamespaceKeyword": "error",
         "useNamingConvention": {
           "level": "error",
           "options": {
@@ -106,8 +112,7 @@
             "conventions": [
               {
                 "selector": {
-                  "kind": "variable",
-                  "modifiers": ["const"]
+                  "kind": "variable"
                 },
                 "formats": ["CONSTANT_CASE", "camelCase", "PascalCase"]
               },
@@ -127,10 +132,9 @@
           }
         },
         "useNumberNamespace": "error",
-        "useNumericLiterals": "error",
+        "useNumericSeparators": "error",
         "useSelfClosingElements": "error",
-        "useShorthandArrayType": "error",
-        "useSingleCaseStatement": "error",
+        "useConsistentArrayType": "error",
         "useSingleVarDeclarator": "error",
         "useTemplate": "error"
       },
@@ -143,7 +147,7 @@
         "noCommentText": "error",
         "noCompareNegZero": "error",
         "noConfusingLabels": "error",
-        "noConsoleLog": "warn",
+        "noConsole": "warn",
         "noControlCharactersInRegex": "error",
         "noDebugger": "error",
         "noDoubleEquals": "error",
@@ -164,9 +168,9 @@
         "noRedeclare": "error",
         "noShadowRestrictedNames": "error",
         "noUnsafeNegation": "error",
-        "noUnusedImports": "error",
-        "useGetterReturn": "error",
-        "useValidTypeof": "error"
+        "noVar": "error",
+        "noWith": "error",
+        "useGetterReturn": "error"
       }
     }
   },
@@ -190,27 +194,69 @@
   },
   "overrides": [
     {
-      "includes": [
-        "**/*.test.ts",
-        "**/*.test.tsx",
-        "**/*.spec.ts",
-        "**/*.spec.tsx"
-      ],
-      "plugins": [
-        "./plugins/no-dynamic-imports-in-tests.grit",
-        "./plugins/no-toBeDefined-or-toBeTruthy-in-tests.grit",
-        "./plugins/no-spyOn-in-tests.grit",
-        "./plugins/no-explicit-any-in-tests.grit"
-      ]
+      "includes": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"]
     },
     {
-      "includes": ["**/*.ts", "**/*.tsx"],
-      "plugins": [
-        "./plugins/no-zod-native-enum.grit",
-        "./plugins/enforce-option-either-usage.grit",
-        "./plugins/no-direct-null-checks.grit",
-        "./plugins/no-unhandled-option-either.grit"
-      ]
+      "includes": ["**/*.ts", "**/*.tsx"]
+    },
+    {
+      "includes": ["**/*.css"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noUnknownAtRules": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["types/**/*.d.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noNamespace": "off",
+            "useNamingConvention": {
+              "level": "off"
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["tailwind.config.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": {
+              "level": "off"
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["lib/auth/client.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": {
+              "level": "off"
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["lib/trpc/provider.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": {
+              "level": "off"
+            }
+          }
+        }
+      }
     }
   ]
 }

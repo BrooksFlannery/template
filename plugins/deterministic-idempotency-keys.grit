@@ -3,7 +3,7 @@
 // Update the function name pattern (e.g., createTriggerIdempotencyKey, createIdempotencyKey)
 // to match the actual naming convention used in this project.
 //
-// engine biome(1.0)
+// engine biome(2.0)
 // language js
 //
 // or {

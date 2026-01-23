@@ -5,17 +5,8 @@
  * Provides type-safe validation with functional error handling.
  */
 
-import { z } from "zod"
-import {
-  Option,
-  Either,
-  some,
-  none,
-  left,
-  right,
-  fromNullable,
-  flatMap,
-} from "./fp"
+import type { z } from "zod"
+import { type Either, flatMap, fromNullable, left, none, type Option, right, some } from "./fp"
 
 /**
  * Validates a value against a Zod schema, returning an Option.
@@ -34,7 +25,7 @@ import {
  */
 export const parseOption = <T extends z.ZodTypeAny>(
   schema: T,
-  value: unknown,
+  value: unknown
 ): Option<z.infer<T>> => {
   const result = schema.safeParse(value)
   return result.success ? some(result.data) : none
@@ -57,7 +48,7 @@ export const parseOption = <T extends z.ZodTypeAny>(
  */
 export const parseEither = <T extends z.ZodTypeAny>(
   schema: T,
-  value: unknown,
+  value: unknown
 ): Either<z.ZodError, z.infer<T>> => {
   const result = schema.safeParse(value)
   return result.success ? right(result.data) : left(result.error)
@@ -80,15 +71,13 @@ export const parseEither = <T extends z.ZodTypeAny>(
  */
 export const parseEitherMessage = <T extends z.ZodTypeAny>(
   schema: T,
-  value: unknown,
+  value: unknown
 ): Either<string, z.infer<T>> => {
   const result = schema.safeParse(value)
   if (result.success) {
     return right(result.data)
   }
-  const message = result.error.errors
-    .map((e) => `${e.path.join(".")}: ${e.message}`)
-    .join(", ")
+  const message = result.error.errors.map((e) => `${e.path.join(".")}: ${e.message}`).join(", ")
   return left(message)
 }
 
@@ -119,8 +108,7 @@ export const createOptionValidator = <T extends z.ZodTypeAny>(schema: T) => {
  * const user = validateUser(input) // Either<ZodError, User>
  */
 export const createEitherValidator = <T extends z.ZodTypeAny>(schema: T) => {
-  return (value: unknown): Either<z.ZodError, z.infer<T>> =>
-    parseEither(schema, value)
+  return (value: unknown): Either<z.ZodError, z.infer<T>> => parseEither(schema, value)
 }
 
 /**
@@ -137,7 +125,7 @@ export const createEitherValidator = <T extends z.ZodTypeAny>(schema: T) => {
  */
 export const parseNullableOption = <T extends z.ZodTypeAny>(
   schema: T,
-  value: unknown,
+  value: unknown
 ): Option<z.infer<T>> => {
   return flatMap((v: unknown) => parseOption(schema, v))(fromNullable(value))
 }
