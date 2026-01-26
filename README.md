@@ -79,6 +79,13 @@ bun run type-check
 bun run pre-commit
 ```
 
+**Git Hooks:**
+Pre-commit hooks are automatically installed when you run `bun install`. The hook runs `bun run pre-commit` before each commit to ensure code quality. If you need to manually install or reinstall the hooks:
+
+```bash
+bun run install-git-hooks
+```
+
 ## Project Structure
 
 ```
