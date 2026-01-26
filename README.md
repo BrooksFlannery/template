@@ -73,6 +73,10 @@ bun run lint:fix
 
 # Type check
 bun run type-check
+
+# Run pre-commit checks (lint + type-check)
+# Use this before committing to catch issues early
+bun run pre-commit
 ```
 
 ## Project Structure

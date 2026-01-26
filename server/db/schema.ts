@@ -11,3 +11,7 @@
  *   createdAt: timestamp("created_at").defaultNow().notNull(),
  * })
  */
+
+// Export empty object to make this a valid module
+// Remove this when you add your first table definition
+export {}
