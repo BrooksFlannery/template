@@ -10,7 +10,8 @@
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
     "format": "biome format --write .",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "pre-commit": "bun run lint && bun run type-check"
   },
   "dependencies": {
     "@neondatabase/serverless": "1.0.2",
