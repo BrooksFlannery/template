@@ -15,13 +15,23 @@ jobs:
     if: github.event.pull_request.user.login == 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
+      - name: Debug trigger context
+        run: |
+          echo "actor=${{ github.actor }}"
+          echo "sender=${{ github.event.sender.login }}"
+          echo "action=${{ github.event.action }}"
+          echo "PR author=${{ github.event.pull_request.user.login }}"
       - name: Check for PAT secret
         env:
           PAT: ${{ secrets.DEPENDABOT_PAT }}
         run: |
           if [ -z "$PAT" ]; then
             echo "::error::DEPENDABOT_PAT secret is required to trigger CI workflows after lockfile update."
-            echo "::error::Please create a Personal Access Token with 'repo' and 'workflow' permissions and add it as a Dependabot secret named 'DEPENDABOT_PAT' (not a regular Actions secret)."
+            echo "::error::The secret must be added to BOTH:"
+            echo "::error::  1. Settings → Secrets and variables → Actions → DEPENDABOT_PAT"
+            echo "::error::  2. Settings → Secrets and variables → Dependabot → DEPENDABOT_PAT"
+            echo "::error::This is required because Dependabot secrets are only available when Dependabot triggers the workflow,"
+            echo "::error::but Actions secrets are needed when the workflow runs after a PAT push (synchronize event)."
             exit 1
           fi
       - name: Checkout repository
