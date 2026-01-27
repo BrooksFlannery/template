@@ -22,11 +22,26 @@ updates:
       interval: daily
     commit-message:
       prefix: "[deps] "
+    ignore:
+      # Block all major version updates
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     groups:
-      production-dependencies:
+      patch-updates:
         patterns:
           - "*"
         exclude-patterns:
           - "@types/*"
           - "typescript"
           - "@biomejs/*"
+        update-types:
+          - "version-update:semver-patch"
+      minor-updates:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "@types/*"
+          - "typescript"
+          - "@biomejs/*"
+        update-types:
+          - "version-update:semver-minor"

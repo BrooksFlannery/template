@@ -77,7 +77,7 @@ export const parseEitherMessage = <T extends z.ZodTypeAny>(
   if (result.success) {
     return right(result.data)
   }
-  const message = result.error.errors.map((e) => `${e.path.join(".")}: ${e.message}`).join(", ")
+  const message = result.error.issues.map((e) => `${e.path.join(".")}: ${e.message}`).join(", ")
   return left(message)
 }
 
