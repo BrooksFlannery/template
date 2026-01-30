@@ -114,4 +114,4 @@ template/
 
 ## Agent Guidelines
 
-See [AGENTS.md](./AGENTS.md) for detailed development guidelines and agent roles.
+Agent configuration lives in [`.agents/`](./.agents/) as skills. See `.agents/skills/` for project context, behavioral rules, and FP philosophy used by AI agents in this codebase.
