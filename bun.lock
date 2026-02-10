@@ -6,7 +6,7 @@
       "dependencies": {
         "@neondatabase/serverless": "1.0.2",
         "@tanstack/react-query": "5.90.20",
-        "@trpc/client": "11.8.1",
+        "@trpc/client": "11.10.0",
         "@trpc/next": "11.9.0",
         "@trpc/react-query": "11.8.1",
         "@trpc/server": "11.8.1",
@@ -246,7 +246,7 @@
 
     "@tanstack/react-query": ["@tanstack/react-query@5.90.20", "", { "dependencies": { "@tanstack/query-core": "5.90.20" }, "peerDependencies": { "react": "^18 || ^19" } }, "sha512-vXBxa+qeyveVO7OA0jX1z+DeyCA4JKnThKv411jd5SORpBKgkcVnYKCiBgECvADvniBX7tobwBmg01qq9JmMJw=="],
 
-    "@trpc/client": ["@trpc/client@11.8.1", "", { "peerDependencies": { "@trpc/server": "11.8.1", "typescript": ">=5.7.2" } }, "sha512-L/SJFGanr9xGABmuDoeXR4xAdHJmsXsiF9OuH+apecJ+8sUITzVT1EPeqp0ebqA6lBhEl5pPfg3rngVhi/h60Q=="],
+    "@trpc/client": ["@trpc/client@11.10.0", "", { "peerDependencies": { "@trpc/server": "11.10.0", "typescript": ">=5.7.2" } }, "sha512-h0s2AwDtuhS8INRb4hlo4z3RKCkarWqlOy+3ffJgrlDxzzW6aLUN+9nDrcN4huPje1Em15tbCOqhIc6oaKYTRw=="],
 
     "@trpc/next": ["@trpc/next@11.9.0", "", { "peerDependencies": { "@tanstack/react-query": "^5.59.15", "@trpc/client": "11.9.0", "@trpc/react-query": "11.9.0", "@trpc/server": "11.9.0", "next": "*", "react": ">=16.8.0", "react-dom": ">=16.8.0", "typescript": ">=5.7.2" }, "optionalPeers": ["@tanstack/react-query", "@trpc/react-query"] }, "sha512-t49I8mlUa/aOr42C4SiYb9bwOFdX9O7Rk9HAxsRWQc45lVkSbKq/gN2xB117DDZ+hahfDUwAOGue/c4IB67Wig=="],
 
